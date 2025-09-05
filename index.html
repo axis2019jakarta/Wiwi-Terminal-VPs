@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nabila VPS - Terminal Modern untuk Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6a0dad; /* Ungu gelap */
+            --secondary-color: #ff6f61; /* Coral */
+            --background-dark: #1a1a2e;
+            --background-light: #f4f4f9;
+            --text-light: #e0e0e0;
+            --text-dark: #333;
+            --terminal-bg: #0d1117; /* GitHub Dark */
+            --terminal-text: #c9d1d9;
+            --code-text: #79c0ff; /* Biru muda */
+            --accent-green: #3fb950;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--background-light);
+            scroll-behavior: smooth;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-light);
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        .dark-mode section {
+            border-color: #333;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .dark-mode h2 {
+            color: var(--secondary-color);
+        }
+
+        h2::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: var(--secondary-color);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -15px;
+            border-radius: 2px;
+        }
+
+        .dark-mode h2::after {
+            background: var(--primary-color);
+        }
+
+        .features-grid, .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item, .workflow-item {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-mode .feature-item, .dark-mode .workflow-item {
+            background: #282c34;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-item:hover, .workflow-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-item h3, .workflow-item h3 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            margin-bottom: 1rem;
+        }
+
+        .dark-mode .feature-item h3, .dark-mode .workflow-item h3 {
+            color: var(--secondary-color);
+        }
+
+        .feature-item p, .workflow-item p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .dark-mode .feature-item p, .dark-mode .workflow-item p {
+            color: var(--text-light);
+        }
+
+        .terminal-mockup {
+            background-color: var(--terminal-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Roboto Mono', monospace;
+            color: var(--terminal-text);
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+            margin-bottom: 1rem;
+        }
+
+        .terminal-buttons span {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .terminal-buttons .close { background-color: #ff5f56; }
+        .terminal-buttons .minimize { background-color: #ffbd2e; }
+        .terminal-buttons .maximize { background-color: #27c93f; }
+
+        .terminal-title {
+            color: #999;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .terminal-line {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .prompt {
+            color: var(--accent-green);
+            margin-right: 0.5em;
+        }
+
+        .input {
+            color: var(--code-text);
+        }
+
+        .output {
+            color: var(--terminal-text);
+            margin-left: 1.5em;
+            white-space: pre-wrap;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 3rem;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            background: #e05e54;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            background: var(--background-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+
+        .theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: background 0.3s ease;
+        }
+
+        .theme-switcher:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            header p {
+                font-size: 1em;
+            }
+            h2 {
+                font-size: 2em;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .feature-item, .workflow-item {
+                padding: 1.5rem;
+            }
+            .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Nabila VPS</h1>
+            <p>Terminal Modern untuk Mobile dan Desktop: Powerful, Mudah, Cepat.</p>
+            <a href="#download" class="cta-button">Mulai Sekarang</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="container">
+            <h2>Tentang Nabila VPS</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto; font-size: 1.1em;">
+                Nabila VPS adalah solusi terminal revolusioner yang dirancang untuk developer modern.
+                Menawarkan pengalaman CLI layaknya Linux/Unix di perangkat mobile maupun desktop Anda,
+                dengan fitur integrasi dan kemudahan yang jauh melampaui terminal tradisional.
+                Bangun, deploy, dan kelola proyek Anda dari mana saja, kapan saja.
+            </p>
+            <div class="terminal-mockup">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <span class="close"></span>
+                        <span class="minimize"></span>
+                        <span class="maximize"></span>
+                    </div>
+                    <span class="terminal-title">bash - Nabila VPS</span>
+                </div>
+                <div class="terminal-content">
+                    <div class="terminal-line">
+                        <span class="prompt">nabila@vps:~ $</span>
+                        <span class="input">git clone my-awesome-project</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="output">Cloning into 'my-awesome-project'...</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="prompt">nabila@vps:~ $</span>
+                        <span class="input">cd my-awesome-project</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="prompt">nabila@vps:~/my-awesome-project $</span>
+                        <span class="input">deploy</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="output">🚀 Building and deploying to Vercel...</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="output">✅ Deployment successful! Live at <a href="#" style="color: var(--code-text);">https://my-awesome-project.vercel.app</a></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="container">
+            <h2>Fitur Unggulan</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Terminal Environment Penuh</h3>
+                    <p>Rasakan kekuatan CLI Linux/Unix (bash/zsh) dengan dukungan penuh untuk package manager populer seperti apt, npm, pip, dan lainnya. Jalankan perintah coding, git, dan deploy dengan mudah.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Integrasi GitHub Seamless</h3>
+                    <p>Login GitHub langsung dari terminal. Lakukan clone, push, pull, dan commit proyek Anda dengan satu sentuhan. SSH key dan token terkelola secara otomatis.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Deploy Cepat ke Vercel</h3>
+                    <p>Gunakan perintah bawaan `deploy` untuk langsung membangun dan mendeploy proyek Anda ke Vercel. Integrasi akun Vercel dan dukungan framework modern seperti Next.js, React, Vue.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Kemudahan Developer</h3>
+                    <p>Alias command yang intuitif (start, push, deploy). Auto setup environment proyek. Sinkronkan dari GitHub dan deploy ke Vercel hanya dengan 1-2 perintah.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Kustomisasi Tingkat Lanjut</h3>
+                    <p>Dukungan penuh untuk plugin dan ekstensi untuk memperluas fungsionalitas. UI/UX modern dengan tampilan CLI yang nyaman dan mudah disesuaikan.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Ringan dan Stabil</h3>
+                    <p>Dirancang untuk performa maksimal di berbagai perangkat. Nabila VPS ringan, stabil, dan cocok untuk membangun proyek dari HP maupun PC dengan pengalaman yang konsisten.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="workflow" class="container">
+            <h2>Alur Kerja Cepat Developer</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto; font-size: 1.1em;">
+                Lihat betapa mudahnya mengembangkan dan mendeploy proyek Anda dengan Nabila VPS.
+            </p>
+            <div class="workflow-grid">
+                <div class="workflow-item">
+                    <h3>1. Clone & Setup</h3>
+                    <p>Login GitHub, lalu clone repository Anda. Nabila VPS akan otomatis menyiapkan lingkungan proyek.</p>
+                    <div class="terminal-mockup" style="max-width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                        <div class="terminal-line"><span class="prompt">nabila@vps:~ $</span> <span class="input">git clone my-frontend-app</span></div>
+                        <div class="terminal-line"><span class="output">Auto-setting up Node.js environment...</span></div>
+                    </div>
+                </div>
+                <div class="workflow-item">
+                    <h3>2. Develop & Test</h3>
+                    <p>Jalankan perintah develop lokal dengan alias `start`, atau perintah lainnya seperti `npm run dev`.</p>
+                    <div class="terminal-mockup" style="max-width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                        <div class="terminal-line"><span class="prompt">nabila@vps:~/my-frontend-app $</span> <span class="input">start</span></div>
+                        <div class="terminal-line"><span class="output">Starting development server on port 3000...</span></div>
+                    </div>
+                </div>
+                <div class="workflow-item">
+                    <h3>3. Commit & Push</h3>
+                    <p>Integrasi Git memudahkan Anda melakukan commit dan push perubahan langsung dari terminal.</p>
+                    <div class="terminal-mockup" style="max-width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                        <div class="terminal-line"><span class="prompt">nabila@vps:~/my-frontend-app $</span> <span class="input">git add . && git commit -m "feat: add new section"</span></div>
+                        <div class="terminal-line"><span class="prompt">nabila@vps:~/my-frontend-app $</span> <span class="input">push</span></div>
+                        <div class="terminal-line"><span class="output">Pushing to origin main...</span></div>
+                    </div>
+                </div>
+                <div class="workflow-item">
+                    <h3>4. Deploy ke Vercel</h3>
+                    <p>Dengan satu perintah `deploy`, proyek Anda akan otomatis dibangun dan di-deploy ke Vercel.</p>
+                    <div class="terminal-mockup" style="max-width: 100%; margin-top: 1rem; padding: 0.8rem;">
+                        <div class="terminal-line"><span class="prompt">nabila@vps:~/my-frontend-app $</span> <span class="input">deploy</span></div>
+                        <div class="terminal-line"><span class="output">Deployment completed! View at vercel.app/your-app</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="container" style="text-align: center;">
+            <h2>Dapatkan Nabila VPS Sekarang!</h2>
+            <p style="font-size: 1.2em; max-width: 700px; margin: 0 auto 2rem auto;">
+                Siap untuk merasakan pengalaman pengembangan yang lebih cepat dan efisien?
+                Unduh Nabila VPS dan mulai bangun proyek impian Anda dari mana saja.
+            </p>
+            <a href="#" class="cta-button">Unduh untuk Desktop</a>
+            <a href="#" class="cta-button" style="margin-left: 1.5rem; background: var(--primary-color);">Unduh untuk Mobile</a>
+            <p style="margin-top: 1.5rem; font-size: 0.95em; color: #777;">Tersedia untuk Windows, macOS, Linux, Android, dan iOS.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Nabila VPS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button class="theme-switcher" id="themeSwitcher">🌙</button>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Theme Switcher (Dark Mode)
+        const themeSwitcher = document.getElementById('themeSwitcher');
+        const body = document.body;
+
+        themeSwitcher.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            themeSwitcher.textContent = isDarkMode ? '☀️' : '🌙'; // Change icon
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            body.classList.add('dark-mode');
+            themeSwitcher.textContent = '☀️';
+        }
+    </script>
+</body>
+</html>
